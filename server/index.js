@@ -79,10 +79,10 @@ app.delete("/news/delete/:id", async (req, res) => {
 
 //EVENTS
 //get all events
-//get one events
-//create one events
-//edit one events
-//delete one events
+//get one event
+//create one event
+//edit one event
+//delete one event
 
 app.listen(5000, () => {
   console.log("Server has starter on port 5000");
