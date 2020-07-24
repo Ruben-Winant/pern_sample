@@ -1,34 +1,58 @@
 import React, { FunctionComponent } from "react";
 import { Col, Row, Image } from "react-bootstrap";
+import ClampLines from "react-clamp-lines";
+import News from "./News";
 
 interface NaProps {
-  titel: string;
-  content: string;
-  image_path: string;
+  news: News;
 }
 
-export const Newsarticle: FunctionComponent<NaProps> = ({
-  titel,
-  content,
-  image_path,
-}: NaProps) => {
+export const Newsarticle: FunctionComponent<NaProps> = ({ news }: NaProps) => {
   return (
-    <Col>
-      <Row>
-        <Col>
+    <Col style={{ borderLeft: "1px solid #2A2A2A" }} className="pt-3 pb-3">
+      <Row
+        xs={4}
+        style={{ justifyContent: "space-between", alignItems: "center" }}
+      >
+        <Col
+          xs={
+            news.image_path == null ||
+            news.image_path == "" ||
+            typeof news.image_path == "undefined"
+              ? 11
+              : 8
+          }
+          className="ml-5"
+        >
           <Row>
-            <h3>{titel}</h3>
+            <h3>{news.titel}</h3>
           </Row>
           <Row>
-            <p>{content}</p>
+            <ClampLines
+              id={news.titel}
+              text={news.content}
+              lines={4}
+              ellipsis="..."
+              innerElement="p"
+              buttons={false}
+            />
           </Row>
           <Row>
-            <a href="">Lees verder</a>
+            <Col>
+              <p>Gepost op {news.plaatsDatum}</p>
+            </Col>
+            <Col style={{ textAlign: "right" }}>
+              <a href="">Lees verder</a>
+            </Col>
           </Row>
         </Col>
-        <Col>
-          <Image src={require("../../assets/" + image_path)} />
-        </Col>
+        {news.image_path == null ||
+        news.image_path == "" ||
+        typeof news.image_path == "undefined" ? null : (
+          <Col xs={3} style={{}}>
+            <Image fluid src={require("../../assets/" + news.image_path)} />
+          </Col>
+        )}
       </Row>
     </Col>
   );

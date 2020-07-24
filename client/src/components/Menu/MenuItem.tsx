@@ -10,7 +10,7 @@ export const MenuItem = ({ imagePath, menuLabel }: MenuItemProps) => {
   return (
     <Col onClick={() => alert("redirect naar " + menuLabel)} className="mb-3">
       <Row className="mb-2">
-        <Col xs={6} className="mx-auto ">
+        <Col xs={6} className="mx-auto">
           <Image fluid src={imagePath} />
         </Col>
       </Row>
