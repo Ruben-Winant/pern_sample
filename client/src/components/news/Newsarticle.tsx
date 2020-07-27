@@ -37,13 +37,9 @@ export const Newsarticle: FunctionComponent<NaProps> = ({ news }: NaProps) => {
               buttons={false}
             />
           </Row>
-          <Row>
-            <Col>
-              <p>Gepost op {news.plaatsDatum}</p>
-            </Col>
-            <Col style={{ textAlign: "right" }}>
-              <a href="">Lees verder</a>
-            </Col>
+          <Row style={{ justifyContent: "space-between" }}>
+            <p>Gepost op {news.plaatsDatum}</p>
+            <a href="">Lees verder</a>
           </Row>
         </Col>
         {news.image_path == null ||

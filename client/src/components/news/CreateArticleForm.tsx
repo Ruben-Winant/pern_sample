@@ -1,35 +1,44 @@
-import React, { useState } from "react";
-import { Col, Row, Form, Button, Badge } from "react-bootstrap";
+import React, { FormEvent } from "react";
+import { Col, Row, Form, Badge, Button } from "react-bootstrap";
+import * as yup from "yup";
+import { useFormik } from "formik";
+import * as path from "path";
 
 export const CreateArticleForm = () => {
-  const [formData, setFormData] = useState({
-    title: "",
-    content: "",
-    image_path: "",
-    placedDate: (
-      new Date().getDate() +
-      "-" +
-      (new Date().getMonth() + 1) +
-      "-" +
-      new Date().getFullYear()
-    ).toString(),
+  const validationSchema = yup.object().shape({
+    title: yup.string().required(),
+
+    content: yup.string().required(),
+
+    image_path: yup.string().notRequired(),
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const SubmitHandler = (e: Event) => {
-    e.preventDefault();
-    alert(formData.title);
-    alert(formData.content);
-    alert(formData.placedDate);
-    alert(formData.image_path);
-  };
+  const { handleSubmit, handleChange, values, errors, touched } = useFormik({
+    initialValues: {
+      title: "",
+      content: "",
+      image_path: "",
+      placedDate: (
+        new Date().getDate() +
+        "-" +
+        (new Date().getMonth() + 1) +
+        "-" +
+        new Date().getFullYear()
+      ).toString(),
+    },
+    validationSchema,
+    onSubmit(values) {
+      var fileName = path.basename(values.image_path);
+      console.log(fileName);
+    },
+  });
 
   return (
     <Col>
-      <Form>
+      <Form
+        noValidate
+        onSubmit={(e: FormEvent<HTMLFormElement>) => handleSubmit(e)}
+      >
         <Form.Group as={Row}>
           <Form.Label column sm={10}>
             <h2>
@@ -47,7 +56,17 @@ export const CreateArticleForm = () => {
             Titel *
           </Form.Label>
           <Col sm={10}>
-            <Form.Control onChange={handleChange} name="title" type="text" />
+            <Form.Control
+              value={values.title}
+              onChange={handleChange}
+              name="title"
+              type="text"
+              isInvalid={!!errors.title}
+              isValid={touched.title && !errors.title}
+            />
+            <Form.Control.Feedback type="invalid">
+              {errors.title}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
         <Form.Group as={Row} controlId="newsFormContent">
@@ -56,10 +75,16 @@ export const CreateArticleForm = () => {
           </Form.Label>
           <Col sm={10}>
             <Form.Control
+              value={values.content}
               onChange={handleChange}
               name="content"
               as="textarea"
+              isInvalid={!!errors.content}
+              isValid={touched.content && !errors.content}
             />
+            <Form.Control.Feedback type="invalid">
+              {errors.content}
+            </Form.Control.Feedback>
           </Col>
         </Form.Group>
         <Form.Group inline as={Row} controlId="newsFormImageFile">
@@ -68,20 +93,15 @@ export const CreateArticleForm = () => {
           </Form.Label>
           <Col sm={6}>
             <Form.File
+              value={values.image_path}
               onChange={handleChange}
               name="image_path"
               id="newsFormImageFileId"
+              accept="image/*"
             />
           </Col>
           <Col style={{ textAlign: "right" }}>
-            <Button
-              type="submit"
-              onClick={(e: any) => {
-                SubmitHandler(e);
-              }}
-            >
-              Aanmaken
-            </Button>
+            <Button type="submit">Aanmaken</Button>
           </Col>
         </Form.Group>
       </Form>
