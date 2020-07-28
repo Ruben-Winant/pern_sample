@@ -32,6 +32,7 @@ function App() {
 
   return (
     <div>
+      <br />
       <NewsCarousel articles={[n, n1, n2]} />
       <br />
       <Newsarticle news={n} />

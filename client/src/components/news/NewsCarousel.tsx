@@ -1,4 +1,4 @@
-import React, { Component, FunctionComponent } from "react";
+import React, { FunctionComponent } from "react";
 import { Col, Row, Carousel, Image } from "react-bootstrap";
 import News from "./News";
 import ClampLines from "react-clamp-lines";
@@ -15,13 +15,12 @@ export const NewsCarousel: FunctionComponent<NacProps> = ({
 
     articles.forEach((article) => {
       carouselItems.push(
-        <Carousel.Item>
+        <Carousel.Item style={{ height: 400, width: "100%" }}>
           <Image
             style={{
-              maxHeight: 400,
+              objectFit: "cover",
               width: "100%",
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
+              height: "100%",
             }}
             fluid
             src={require("../../assets/" + article.image_path)}
@@ -45,7 +44,9 @@ export const NewsCarousel: FunctionComponent<NacProps> = ({
   return (
     <Col>
       <Row>
-        <Carousel>{carouselItems}</Carousel>
+        <Col className="px-0">
+          <Carousel>{carouselItems}</Carousel>
+        </Col>
       </Row>
     </Col>
   );

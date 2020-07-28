@@ -9,7 +9,7 @@ interface NaProps {
 
 export const Newsarticle: FunctionComponent<NaProps> = ({ news }: NaProps) => {
   return (
-    <Col style={{ borderLeft: "1px solid #2A2A2A" }} className="pt-3 pb-3">
+    <Col style={{ borderLeft: "1px solid #2A2A2A" }} className="pt-3 pb-3 pr-0">
       <Row
         xs={4}
         style={{ justifyContent: "space-between", alignItems: "center" }}
