@@ -38,10 +38,17 @@ app.get("/news/:id", async (req, res) => {
 app.post("/news/create", async (req, res) => {
   try {
     const { title, content, image_path } = req.body;
-    const newArticle = await pool.query(
-      "INSERT INTO newsarticle (title, content, image_path) VALUES ($1,$2,$3) RETURNING *",
-      [title, content, image_path]
-    );
+    const placedDate = (
+      new Date().getDate() +
+      "-" +
+      (new Date().getMonth() + 1) +
+      "-" +
+      new Date().getFullYear()
+    ).toString();
+    /*const newArticle = await pool.query(
+      "INSERT INTO newsarticle (title, content, image_path, placeddate) VALUES ($1,$2,$3,$4) RETURNING *",
+      [title, content, image_path, placedDate]
+    );*/
 
     res.json(newArticle.rows[0]);
   } catch (err) {
@@ -53,7 +60,7 @@ app.post("/news/create", async (req, res) => {
 app.put("/news/edit/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, content, author_id, image_path } = req.body;
+    const { title, content, image_path } = req.body;
     const editedArticle = await pool.query(
       "UPDATE newsarticle SET title=$1, content=$2,image_path=$3 WHERE id=$4 RETURNING *",
       [title, content, image_path, id]
