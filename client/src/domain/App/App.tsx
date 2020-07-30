@@ -1,46 +1,49 @@
-import React from "react";
+import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { CreateArticleForm } from "../../components/news/CreateArticleForm";
 import { Newsarticle } from "../../components/news/Newsarticle";
 import News from "./../../components/news/News";
 import { NewsCarousel } from "../../components/news/NewsCarousel";
 
-function App() {
-  let n: News = {
-    titel: "eerste artikel",
-    content:
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    plaatsDatum: "25-07-2020",
-    image_path: "gang.jpg",
-  };
+interface AppState {
+  news: News[];
+}
+interface AppProps {}
 
-  let n1: News = {
-    titel: "eerste artikel 2",
-    content:
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    plaatsDatum: "25-07-2020",
-    image_path: "gang.jpg",
-  };
+class App extends Component<AppProps, AppState> {
+  constructor(props: AppProps) {
+    super(props);
+    this.state = {
+      news: [],
+    };
+  }
 
-  let n2: News = {
-    titel: "eerste artikel 3",
-    content:
-      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-    plaatsDatum: "25-07-2020",
-    image_path: "gang.jpg",
-  };
+  componentDidMount() {
+    try {
+      fetch("http://localhost:5000/news")
+        .then((response) => response.json())
+        .then((data) => {
+          this.setState({
+            news: data,
+          });
+        });
+    } catch (err) {
+      console.error(err.message);
+    }
+  }
 
-  return (
-    <div>
-      <br />
-      <NewsCarousel articles={[n, n1, n2]} />
-      <br />
-      <Newsarticle news={n} />
-      <br />
-      <CreateArticleForm />
-      <br />
-    </div>
-  );
+  render() {
+    return (
+      <div>
+        <br />
+        <NewsCarousel articles={this.state.news} />
+        <br />
+        <br />
+        <CreateArticleForm />
+        <br />
+      </div>
+    );
+  }
 }
 
 export default App;

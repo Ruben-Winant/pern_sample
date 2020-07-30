@@ -4,7 +4,10 @@ import * as yup from "yup";
 import { useFormik } from "formik";
 
 export const CreateArticleForm = () => {
-  const [response, setResponse] = useState([]);
+  const [res, setResponse] = useState({
+    statusCode: 0,
+    statusMessage: "",
+  });
   const [show, setShow] = useState(false);
 
   const validationSchema = yup.object().shape({
@@ -37,10 +40,15 @@ export const CreateArticleForm = () => {
           body: JSON.stringify(body),
         });
 
-        setResponse(response); //! set response as state to show modal when worked with
+        setResponse({
+          ...res,
+          statusCode: response.status,
+          statusMessage: response.statusText,
+        });
 
         setShow(true);
       } catch (err) {
+        setShow(true);
         console.error(err.message);
       }
     },
@@ -49,6 +57,7 @@ export const CreateArticleForm = () => {
   return (
     <Col>
       <Form
+        id="createArticleFormId"
         noValidate
         onSubmit={(e: FormEvent<HTMLFormElement>) => {
           e.preventDefault();
@@ -128,21 +137,71 @@ export const CreateArticleForm = () => {
         aria-labelledby="contained-modal-title-vcenter"
         centered
       >
-        <Modal.Header closeButton>
+        <Modal.Header
+          style={
+            res.statusCode === 200
+              ? { backgroundColor: "#2ECC71", color: "white" }
+              : { backgroundColor: "#FF6868", color: "white" }
+          }
+        >
           <Modal.Title id="contained-modal-title-vcenter">
-            Modal heading
+            {res.statusCode === 200
+              ? "Article succesvol toegevoegd!"
+              : "Er is een probleem opgetreden."}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <h4>Centered Modal</h4>
-          <p>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio,
-            dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta
-            ac consectetur ac, vestibulum at eros.
-          </p>
+          {res.statusCode === 200 ? (
+            <>
+              <Row>
+                <Col>
+                  <h5>{"Titel: "}</h5>
+                </Col>
+                <Col>
+                  <p>{values.title}</p>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <h5>{"Inhoud: "}</h5>
+                </Col>
+                <Col>
+                  <p>{values.content}</p>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <h5>{"Afbeelding: "}</h5>
+                </Col>
+                <Col>
+                  <p>
+                    {values.image_path
+                      ? values.image_path.replace(/^.*[\\\/]/, "")
+                      : "niet meegegeven"}
+                  </p>
+                </Col>
+              </Row>
+            </>
+          ) : (
+            <>
+              <Row>
+                <Col>
+                  <h5>{"Error: " + res.statusCode}</h5>
+                </Col>
+                <Col>
+                  <p>{res.statusMessage}</p>
+                </Col>
+              </Row>
+            </>
+          )}
         </Modal.Body>
         <Modal.Footer>
-          <Button onClick={() => setShow(false)}>Close</Button>
+          {res.statusCode === 200 ? (
+            <Button variant="info" onClick={() => setShow(false)}>
+              Bewerken
+            </Button>
+          ) : null}
+          <Button onClick={() => setShow(false)}>Sluiten</Button>
         </Modal.Footer>
       </Modal>
     </Col>

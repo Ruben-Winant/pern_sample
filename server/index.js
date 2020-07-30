@@ -13,7 +13,9 @@ app.use(express.json());
 //get all news articles
 app.get("/news", async (req, res) => {
   try {
-    const allNews = await pool.query("SELECT * FROM newsarticle");
+    const allNews = await pool.query(
+      "SELECT * FROM newsarticle ORDER BY placeddate"
+    );
     res.json(allNews.rows);
   } catch (err) {
     console.error(err.message);
@@ -45,10 +47,10 @@ app.post("/news/create", async (req, res) => {
       "-" +
       new Date().getFullYear()
     ).toString();
-    /*const newArticle = await pool.query(
+    const newArticle = await pool.query(
       "INSERT INTO newsarticle (title, content, image_path, placeddate) VALUES ($1,$2,$3,$4) RETURNING *",
       [title, content, image_path, placedDate]
-    );*/
+    );
 
     res.json(newArticle.rows[0]);
   } catch (err) {

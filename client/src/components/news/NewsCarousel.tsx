@@ -14,6 +14,10 @@ export const NewsCarousel: FunctionComponent<NacProps> = ({
     var carouselItems: any = [];
 
     articles.forEach((article) => {
+      let imgSrc =
+        article.image_path != null && article.image_path != ""
+          ? article.image_path
+          : "gang.jpg";
       carouselItems.push(
         <Carousel.Item style={{ height: 400, width: "100%" }}>
           <Image
@@ -23,7 +27,7 @@ export const NewsCarousel: FunctionComponent<NacProps> = ({
               height: "100%",
             }}
             fluid
-            src={require("../../assets/" + article.image_path)}
+            src={require("../../assets/" + imgSrc)}
           />
           <Carousel.Caption>
             <h3>{article.titel}</h3>

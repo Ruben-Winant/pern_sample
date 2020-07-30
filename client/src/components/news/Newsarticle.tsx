@@ -8,22 +8,19 @@ interface NaProps {
 }
 
 export const Newsarticle: FunctionComponent<NaProps> = ({ news }: NaProps) => {
+  let colsize =
+    typeof news.image_path === "undefined" ||
+    news.image_path === null ||
+    news.image_path === ""
+      ? 11
+      : 8;
   return (
     <Col style={{ borderLeft: "1px solid #2A2A2A" }} className="pt-3 pb-3 pr-0">
       <Row
         xs={4}
         style={{ justifyContent: "space-between", alignItems: "center" }}
       >
-        <Col
-          xs={
-            news.image_path == null ||
-            news.image_path == "" ||
-            typeof news.image_path == "undefined"
-              ? 11
-              : 8
-          }
-          className="ml-5"
-        >
+        <Col xs={colsize} className="ml-5">
           <Row>
             <h3>{news.titel}</h3>
           </Row>
